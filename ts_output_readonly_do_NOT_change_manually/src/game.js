@@ -20,8 +20,6 @@ var game;
     game.isHexModalShown = false;
     game.hexRow = 3;
     game.hexCol = 3;
-    game.height = 0;
-    game.width = 0;
     game.coordinates = [];
     game.playerColor = ['#ED3B3B', '#3889F2', '#2AC761', '#CC9D04'];
     game.myIndex = -2;
@@ -63,19 +61,24 @@ var game;
     // needed for initial building phase
     game.initialBuilding = true;
     var initBuildingReverse = false;
-    function init_callback(gameAreaWidth, gameAreaHeight) {
-        game.height = gameAreaHeight;
-        game.width = gameAreaWidth;
+    var width = 972.8;
+    var height = 729.6;
+    game.infoSectionStyle = getInfoSectionStyle();
+    game.gameBoardStyle = getGameBoardStyle();
+    game.myPanelStyle = getMyPanelStyle();
+    function onDimChanged(w, h) {
+        width = w;
+        height = h;
+        log.log('Game area size updated, width is ' + width + ', height is ' + height);
+        game.infoSectionStyle = getInfoSectionStyle();
+        game.gameBoardStyle = getGameBoardStyle();
+        game.myPanelStyle = getMyPanelStyle();
     }
-    game.init_callback = init_callback;
     function init() {
-        resizeGameAreaService.setWidthToHeight(1.33333);
-        //resizeGameAreaService.setWidthToHeight(1.33333, init_callback);
+        resizeGameAreaService.setWidthToHeight(1.33333, onDimChanged);
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
         log.log("Translation of 'Pioneers' is " + translate('RULES_OF_PIONEERS'));
-        //    resizeGameAreaService.setWidthToHeight(1);
-        resizeGameAreaService.setWidthToHeight(1.33333);
         moveService.setGame({
             minNumberOfPlayers: 4,
             maxNumberOfPlayers: 4,
@@ -371,6 +374,7 @@ var game;
         }
         return ret;
     }
+    game.getHexPoints = getHexPoints;
     function getBoardHex(row, col) {
         var offset = getOffset(row, 45);
         var x = 105 + offset * col * 2 - (row % 2 === 1 ? offset : 0);
@@ -384,6 +388,13 @@ var game;
         return [x.toString(), y.toString()];
     }
     game.getCenter = getCenter;
+    function getHexCenter(row, col) {
+        var offset = getOffset(row, 25);
+        var t = 100 + offset * row * Math.sqrt(3);
+        var l = 105 + offset * col * 2 - (row % 2 === 1 ? offset : 0);
+        return 'top:' + t + 'px; left:' + l + 'px;';
+    }
+    game.getHexCenter = getHexCenter;
     function showHex(row, col) {
         if ((row === 0 || row === 6) && (col === 0 || col > 4))
             return false;
@@ -1235,6 +1246,34 @@ var game;
             game.alertStyle = 'danger';
             game.alertMsg = e.message;
         }
+    }
+    function tempHexFunc(row, col) {
+        console.log('Hex clicked: ' + row + ' ,' + col);
+    }
+    game.tempHexFunc = tempHexFunc;
+    function getInfoSectionStyle() {
+        var t = 0; //top
+        var l = 0; //left
+        var w = width * 0.375; //width
+        var h = height * 0.66667; //height
+        log.log('Set InfoSection: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+    }
+    function getGameBoardStyle() {
+        var t = 0; //top
+        var l = width * 0.375; //left
+        var w = width * 0.625; //width
+        var h = height * 0.66667; //height
+        log.log('Set GameBoard: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+    }
+    function getMyPanelStyle() {
+        var t = height * 0.66667; //top
+        var l = 0; //left
+        var w = width; //width
+        var h = height * 0.33333; //height
+        log.log('Set MyPanel: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
     }
 })(game || (game = {}));
 function getArray(length) {

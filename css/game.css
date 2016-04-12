@@ -180,7 +180,6 @@ ul {
 }
 
 #gameArea {
-  border: 3px solid #B50505;
   font-family:"Segoe UI";
 }
 
@@ -228,6 +227,23 @@ body {
 
 .my-info-border {
  border: 5px solid #EBEB1A;
+}
+
+.absolute-pos {
+  position: absolute;
+  border: 3px solid red;
+}
+
+#infoSection {
+  background-color: red;
+}
+
+#gameBoard {
+  background-color: white;
+}
+
+#myPanel {
+  background-color: green;
 }
 
 #PlayersInfo {

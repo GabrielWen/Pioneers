@@ -23,8 +23,6 @@ module game {
   export let isHexModalShown: boolean = false;
   export let hexRow: number = 3;
   export let hexCol: number = 3;
-  export let height: number = 0;
-  export let width: number = 0;
 
   export let coordinates: string[][][] = [];
   export let playerColor = ['#ED3B3B', '#3889F2', '#2AC761', '#CC9D04'];
@@ -81,20 +79,29 @@ module game {
   export let initialBuilding: boolean = true;
   let initBuildingReverse: boolean = false;
   
+  let width: number = 972.8;
+  let height: number = 729.6;
+  export let infoSectionStyle = getInfoSectionStyle();
+  export let gameBoardStyle = getGameBoardStyle();
+  export let myPanelStyle = getMyPanelStyle();
 
-  export function init_callback(gameAreaWidth: number, gameAreaHeight: number): void {
-    height = gameAreaHeight;
-    width = gameAreaWidth;
+  function onDimChanged(w: number, h: number) {
+    width = w;
+    height = h;
+
+    log.log('Game area size updated, width is ' + width + ', height is ' + height);
+
+    infoSectionStyle = getInfoSectionStyle();
+    gameBoardStyle = getGameBoardStyle();
+    myPanelStyle = getMyPanelStyle();
   }
+
   export function init() {
-    resizeGameAreaService.setWidthToHeight(1.33333);
-    //resizeGameAreaService.setWidthToHeight(1.33333, init_callback);
+    resizeGameAreaService.setWidthToHeight(1.33333, onDimChanged);
     
     translate.setTranslations(getTranslations());
     translate.setLanguage('en');
     log.log("Translation of 'Pioneers' is " + translate('RULES_OF_PIONEERS'));
-//    resizeGameAreaService.setWidthToHeight(1);
-    resizeGameAreaService.setWidthToHeight(1.33333);
     moveService.setGame({
       minNumberOfPlayers: 4,
       maxNumberOfPlayers: 4,
@@ -392,7 +399,7 @@ module game {
     return (Math.sqrt(3) * radius) / 2;
   }
 
-  function getHexPoints(x: number, y: number, radius: number): string[] {
+  export function getHexPoints(x: number, y: number, radius: number): string[] {
     let ret: string[] = [];
     for (let theta = 0; theta < Math.PI * 2; theta += Math.PI / 3) {
       let pointX = x + radius * Math.sin(theta);
@@ -417,6 +424,13 @@ module game {
     let y = 100 + offset * row * Math.sqrt(3);
 
     return [x.toString(), y.toString()];
+  }
+
+  export function getHexCenter(row: number, col: number): string {
+    let offset = getOffset(row, 25);
+    let t = 100 + offset * row * Math.sqrt(3);
+    let l = 105 + offset * col * 2 - (row % 2 === 1 ? offset : 0);
+    return 'top:' + t + 'px; left:' + l + 'px;';
   }
 
   export function showHex(row: number, col: number): boolean {
@@ -1325,6 +1339,43 @@ module game {
       alertStyle = 'danger';
       alertMsg = e.message;
     }
+  }
+
+  export function tempHexFunc(row: number, col: number) {
+    console.log('Hex clicked: ' + row + ' ,' + col);
+  }
+
+  function getInfoSectionStyle(): string {
+    let t = 0; //top
+    let l = 0; //left
+    let w = width * 0.375; //width
+    let h = height * 0.66667; //height
+
+    log.log('Set InfoSection: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+  }
+
+  function getGameBoardStyle(): string {
+    let t = 0; //top
+    let l = width * 0.375; //left
+    let w = width * 0.625; //width
+    let h = height * 0.66667; //height
+
+    log.log('Set GameBoard: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+  }
+
+  function getMyPanelStyle(): string {
+    let t = height * 0.66667; //top
+    let l = 0; //left
+    let w = width; //width
+    let h = height * 0.33333; //height
+
+    log.log('Set MyPanel: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
   }
 }
 
