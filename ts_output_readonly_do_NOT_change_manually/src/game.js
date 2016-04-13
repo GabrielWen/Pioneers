@@ -1275,6 +1275,24 @@ var game;
         log.log('Set MyPanel: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
         return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
     }
+    function getMyInfoPicStyle(idx) {
+        var t = height * 0.12;
+        var w = width * 0.09;
+        var h = height * 0.2;
+        var size = w > h ? h : w;
+        var l = idx * size;
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+    }
+    game.getMyInfoPicStyle = getMyInfoPicStyle;
+    function getMyInfoNumsStyle(idx) {
+        var w = width * 0.09;
+        var h = height * 0.2;
+        var size = w > h ? h : w;
+        var t = height * 0.12 + size;
+        var l = idx * size + (size * 0.4);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+    }
+    game.getMyInfoNumsStyle = getMyInfoNumsStyle;
 })(game || (game = {}));
 function getArray(length) {
     var ret = [];

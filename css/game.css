@@ -187,7 +187,6 @@ ul {
   background-image: url(../imgs/card-pattern.jpg);
 }
 
-
 .my-cards img {
 	width:6%;
 }
@@ -234,20 +233,21 @@ body {
   border: 3px solid red;
 }
 
-#infoSection {
-  background-color: red;
-}
-
 #gameBoard {
   background-color: white;
-}
-
-#myPanel {
-  background-color: green;
 }
 
 #PlayersInfo {
 	position:absolute;
 	bottom: 0;
 	margin-bottom:-35px;
+}
+
+.my-info-pics {
+  position: absolute;
+}
+
+.my-info-nums {
+  position: absolute;
+  color: white;
 }

@@ -1377,6 +1377,28 @@ module game {
 
     return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
   }
+
+  export function getMyInfoPicStyle(idx: number): string {
+    let t = height * 0.12;
+    let w = width * 0.09;
+    let h = height * 0.2;
+
+    let size = w > h ? h : w;
+    let l = idx * size;
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+  }
+
+  export function getMyInfoNumsStyle(idx: number): string {
+    let w = width * 0.09;
+    let h = height * 0.2;
+
+    let size = w > h ? h : w;
+    let t = height * 0.12 + size;
+    let l = idx * size + (size * 0.4);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+  }
 }
 
 function getArray(length: number): number[] {

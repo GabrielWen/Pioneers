@@ -125,11 +125,32 @@
 
 <div id="gameArea">
   <div class="container-fluid">
-    <div id="infoSection" class="absolute-pos" ng-attr-style="{{game.infoSectionStyle}}">
+    <div id="InfoSection" class="absolute-pos" ng-attr-style="{{game.infoSectionStyle}}">
     </div>
     <div id="GameBoard" class="absolute-pos" ng-attr-style="{{game.gameBoardStyle}}">
     </div>
-    <div id="myPanel" class="absolute-pos" ng-attr-style="{{game.myPanelStyle}}">
+    <div id="MyResourcesInfo" class="absolute-pos" ng-attr-style="{{game.myPanelStyle}}">
+      <h4>My Resources</h4>
+      <span ng-repeat="res in resourceSize">
+        <image class="my-info-pics" ng-attr-style="{{game.getMyInfoPicStyle(res)}}"
+               ng-attr-src="imgs/resource{{res}}.png" alt="imgs/resource-card.png">
+          <strong class="my-info-nums" ng-attr-style="{{game.getMyInfoNumsStyle(res)}}">
+            {{game.getNumResources(game.myIndex, res)}}
+          </strong>
+        </image>
+      </span>
+      <span ng-repeat="dev in devCardsSize">
+        <image class="my-info-pics" ng-attr-style="{{game.getMyInfoPicStyle(dev + resourceSize.length)}}"
+               ng-attr-src="imgs/devCards{{dev}}.jpg" alt="imgs/resource-card.png"
+               ng-click="game.onDevCardClicked(dev)" ng-if="game.getNumDevCards(game.myIndex, idx) > 0">
+        <image class="my-info-pics" ng-attr-style="{{game.getMyInfoPicStyle(dev + resourceSize.length)}}"
+               ng-attr-src="imgs/devCards{{dev}}.jpg" alt="imgs/resource-card.png"
+               ng-if="game.getNumDevCards(game.myIndex, idx) <= 0">
+          <strong class="my-info-nums" ng-attr-style="{{game.getMyInfoNumsStyle(dev + resourceSize.length)}}">
+            {{game.getNumDevCards(game.myIndex, dev)}}
+          </strong>
+        </image>
+      </span>
     </div>
   </div>
 </div>
