@@ -126,6 +126,41 @@
 <div id="gameArea">
   <div class="container-fluid">
     <div id="InfoSection" class="absolute-pos" ng-attr-style="{{game.infoSectionStyle}}">
+      <div id="AlertInfo" ng-attr-class="alert-{{game.alertStyle}}" ng-attr-style="{{game.alertInfoStyle}}"
+           role="alert">
+        <!-- TODO: alertMsg shrink to fit -->
+        <strong class="alert-text">{{game.alertMsg}}</strong>
+      </div>
+      <div id="BuildingInfo" ng-attr-style="{{game.buildingInfoStyle}}">
+      </div>
+      <div id="PlayersInfo">
+        <div ng-repeat="p in players">
+          <div ng-attr-class="absolute-pos {{'player-' + p + '-color'}} {{game.getPlayerBorder(p)}}" ng-attr-style="{{game.getPlayerInfoStyle(p)}}">
+            <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoTextStyle()}}">Player {{p+1}}</strong>
+            <img class="absolute-pos" ng-attr-style="{{game.getPlayerInfoPicStyle(0, 5)}}" src="imgs/resource-card.png" alt="imgs/resource-card.png" />
+            <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoNumStyle(0, 5)}}">{{game.getNumResources(p)}}</strong>
+            <img class="absolute-pos" ng-attr-style="{{game.getPlayerInfoPicStyle(1, 5)}}" src="imgs/develop.svg" alt="imgs/develop.svg" />
+            <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoNumStyle(1, 5)}}">{{game.getNumDevCards(p)}}</strong>
+            <img class="absolute-pos" ng-attr-style="{{game.getPlayerInfoPicStyle(2, 5)}}" src="imgs/devcards4.jpg" alt="imgs/develop.svg" />
+            <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoNumStyle(2, 5)}}">{{game.getPlayerPoints(p)}}</strong>
+            <img class="absolute-pos" ng-attr-style="{{game.getPlayerInfoPicStyle(3, 5)}}" src="imgs/devcards0.jpg" alt="imgs/develop.svg" />
+            <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoNumStyle(3, 5)}}">{{game.getPlayerKnights(p)}}</strong>
+            <img class="absolute-pos" ng-attr-style="{{game.getPlayerInfoPicStyle(4, 5)}}" src="imgs/road.png" alt="imgs/develop.svg" />
+            <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoNumStyle(4, 5)}}">{{game.getPlayerRoadLength(p)}}</strong>
+          </div>
+        </div>
+      </div>
+      <div id="BankInfo" class="bank-info" ng-attr-style="{{game.bankInfoStyle}}">
+        <strong ng-attr-style="{{game.getPlayerInfoTextStyle()}}">Bank</strong>
+        <span ng-repeat="res in resourceSize">
+          <img class="absolute-pos" ng-attr-src="imgs/resource{{res}}.png"
+               alt="imgs/resource-card.png" ng-attr-style="{{game.getPlayerInfoPicStyle(res, resourceSize.length+1)}}">
+          </img>
+          <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoNumStyle(res, resourceSize.length+1)}}">{{game.getBankResources(res)}}</strong>
+        </span>
+        <img class="absolute-pos" src="imgs/develop.svg" alt="imgs/develop.svg" class="imgs/develop.svg" ng-attr-style="{{game.getPlayerInfoPicStyle(resourceSize.length, resourceSize.length+1)}}"/>
+        <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoNumStyle(resourceSize.length, resourceSize.length+1)}}">{{game.getBankDevCards()}}</strong>
+      </div>
     </div>
     <div id="GameBoard" class="absolute-pos" ng-attr-style="{{game.gameBoardStyle}}">
     </div>

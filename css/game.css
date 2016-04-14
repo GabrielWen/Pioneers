@@ -187,6 +187,14 @@ ul {
   background-image: url(../imgs/card-pattern.jpg);
 }
 
+#AlertInfo {
+  display: table;
+}
+
+#BuildingInfo {
+  background-color: white;
+}
+
 .my-cards img {
 	width:6%;
 }
@@ -200,6 +208,7 @@ body {
 }
 
 .bank-info {
+  position: absolute;
   background-color: #eb9bd7;
   border: 2px solid black;
 }
@@ -230,7 +239,6 @@ body {
 
 .absolute-pos {
   position: absolute;
-  border: 3px solid red;
 }
 
 #gameBoard {
@@ -239,8 +247,6 @@ body {
 
 #PlayersInfo {
 	position:absolute;
-	bottom: 0;
-	margin-bottom:-35px;
 }
 
 .my-info-pics {
@@ -250,4 +256,10 @@ body {
 .my-info-nums {
   position: absolute;
   color: white;
+}
+
+.alert-text {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 0.1vw;
 }

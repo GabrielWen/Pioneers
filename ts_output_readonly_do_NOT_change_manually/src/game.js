@@ -63,9 +63,38 @@ var game;
     var initBuildingReverse = false;
     var width = 972.8;
     var height = 729.6;
+    var widthSize = 4;
+    var heightSize = 3;
+    /**
+     * My Info Panel relative size
+     */
+    var myInfoHeight = 0.7;
+    var myInfoHeaderHeight = 0.2;
+    var myInfoPicWidth = 0.09;
+    var myInfoPicHeight = 0.4;
+    var myInfoTextSize = 0.015;
+    /**
+     * Info Section relative size
+     */
+    var infoSectionWidth = 1.2;
+    var infoSectionHeight = heightSize - myInfoHeight;
+    var infoSectionAlertInfoHeight = 0.3;
+    var infoSectionBuildingHeight = 0.2;
+    var playersInfoHeight = (infoSectionHeight - infoSectionAlertInfoHeight - infoSectionBuildingHeight) / (gameLogic.NUM_PLAYERS + 1);
+    var playersInfoTextHeight = 0.05;
+    var playersInfoPadHeight = 0.01;
+    var playersInfoPicHeight = 0.2;
+    /**
+    * Game board size
+    */
+    var boardWidth = widthSize - infoSectionWidth;
+    var boardHeight = heightSize - myInfoHeight;
     game.infoSectionStyle = getInfoSectionStyle();
     game.gameBoardStyle = getGameBoardStyle();
     game.myPanelStyle = getMyPanelStyle();
+    game.alertInfoStyle = getAlertInfoStyle();
+    game.buildingInfoStyle = getBuildingInfoStyle();
+    game.bankInfoStyle = getBankInfoStyle();
     function onDimChanged(w, h) {
         width = w;
         height = h;
@@ -73,9 +102,12 @@ var game;
         game.infoSectionStyle = getInfoSectionStyle();
         game.gameBoardStyle = getGameBoardStyle();
         game.myPanelStyle = getMyPanelStyle();
+        game.alertInfoStyle = getAlertInfoStyle();
+        game.buildingInfoStyle = getBuildingInfoStyle();
+        game.bankInfoStyle = getBankInfoStyle();
     }
     function init() {
-        resizeGameAreaService.setWidthToHeight(1.33333, onDimChanged);
+        resizeGameAreaService.setWidthToHeight(widthSize / heightSize, onDimChanged);
         translate.setTranslations(getTranslations());
         translate.setLanguage('en');
         log.log("Translation of 'Pioneers' is " + translate('RULES_OF_PIONEERS'));
@@ -1254,45 +1286,99 @@ var game;
     function getInfoSectionStyle() {
         var t = 0; //top
         var l = 0; //left
-        var w = width * 0.375; //width
-        var h = height * 0.66667; //height
+        var w = width * (infoSectionWidth / widthSize); //width
+        var h = height * (infoSectionHeight / heightSize); //height
         log.log('Set InfoSection: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
         return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
     }
     function getGameBoardStyle() {
         var t = 0; //top
-        var l = width * 0.375; //left
-        var w = width * 0.625; //width
-        var h = height * 0.66667; //height
+        var l = width * (infoSectionWidth / widthSize); //left
+        var w = width * (boardWidth / widthSize); //width
+        var h = height * (boardHeight / heightSize); //height
         log.log('Set GameBoard: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
         return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
     }
     function getMyPanelStyle() {
-        var t = height * 0.66667; //top
+        var t = height * ((heightSize - myInfoHeight) / heightSize); //top
         var l = 0; //left
         var w = width; //width
-        var h = height * 0.33333; //height
+        var h = height * (myInfoHeight / heightSize); //height
         log.log('Set MyPanel: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
         return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
     }
+    function getAlertInfoStyle() {
+        var t = 0; //top
+        var l = 0; //left
+        var w = width * (infoSectionWidth / widthSize); //width
+        var h = height * (infoSectionAlertInfoHeight / heightSize); //height
+        log.log('Set AlertInfo: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+    }
+    function getBuildingInfoStyle() {
+        var t = height * (infoSectionAlertInfoHeight / heightSize); //top
+        var l = 0; //left
+        var w = width * (infoSectionWidth / widthSize); //width
+        var h = height * (infoSectionBuildingHeight / heightSize); //height
+        log.log('Set AlertInfo: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+    }
+    function getBankInfoStyle() {
+        var t = height * ((infoSectionHeight - playersInfoHeight) / heightSize);
+        var l = 0;
+        var w = width * (infoSectionWidth / widthSize);
+        var h = height * (playersInfoHeight / heightSize);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+    }
     function getMyInfoPicStyle(idx) {
-        var t = height * 0.12;
-        var w = width * 0.09;
-        var h = height * 0.2;
+        var t = height * (myInfoHeaderHeight / heightSize);
+        var w = width * myInfoPicWidth;
+        var h = height * myInfoPicHeight;
         var size = w > h ? h : w;
         var l = idx * size;
         return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
     }
     game.getMyInfoPicStyle = getMyInfoPicStyle;
     function getMyInfoNumsStyle(idx) {
-        var w = width * 0.09;
-        var h = height * 0.2;
+        var w = width * myInfoPicWidth;
+        var h = height * myInfoPicHeight;
         var size = w > h ? h : w;
-        var t = height * 0.12 + size;
+        var t = height * (myInfoHeaderHeight / heightSize) + size;
         var l = idx * size + (size * 0.4);
         return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
     }
     game.getMyInfoNumsStyle = getMyInfoNumsStyle;
+    function getPlayerInfoStyle(idx) {
+        var t = height * (playersInfoHeight / heightSize * idx);
+        var l = 0;
+        var w = width * (infoSectionWidth / widthSize);
+        var h = height * (playersInfoHeight / heightSize);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+    }
+    game.getPlayerInfoStyle = getPlayerInfoStyle;
+    function getPlayerInfoTextStyle() {
+        var size = playersInfoTextHeight / height;
+        return 'font-size:' + size + 'px; top:0px; left:0px;';
+    }
+    game.getPlayerInfoTextStyle = getPlayerInfoTextStyle;
+    function getPlayerInfoPicStyle(idx, total) {
+        var t = height * ((playersInfoTextHeight + playersInfoPadHeight) / heightSize);
+        var w = width * ((infoSectionWidth / total) / widthSize);
+        var h = height * (playersInfoPicHeight / heightSize);
+        var size = w > h ? h : w;
+        var l = idx * size;
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+    }
+    game.getPlayerInfoPicStyle = getPlayerInfoPicStyle;
+    function getPlayerInfoNumStyle(idx, total) {
+        var t = height * ((playersInfoTextHeight + playersInfoPadHeight + playersInfoPicHeight) / heightSize);
+        var w = width * ((infoSectionWidth / total) / widthSize);
+        var h = height * (playersInfoPicHeight / heightSize);
+        var size = w > h ? h : w;
+        var l = (idx + 0.4) * size;
+        return 'top:' + t + 'px; left:' + l + 'px; font-size:' + (height * 0.01) + 'px;';
+    }
+    game.getPlayerInfoNumStyle = getPlayerInfoNumStyle;
 })(game || (game = {}));
 function getArray(length) {
     var ret = [];

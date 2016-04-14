@@ -81,9 +81,43 @@ module game {
   
   let width: number = 972.8;
   let height: number = 729.6;
+
+  let widthSize = 4;
+  let heightSize = 3;
+
+  /**
+   * My Info Panel relative size
+   */
+  let myInfoHeight = 0.7;
+  let myInfoHeaderHeight = 0.2;
+  let myInfoPicWidth = 0.09;
+  let myInfoPicHeight = 0.4;
+  let myInfoTextSize = 0.015;
+
+  /**
+   * Info Section relative size
+   */
+  let infoSectionWidth = 1.2;
+  let infoSectionHeight = heightSize - myInfoHeight;
+  let infoSectionAlertInfoHeight = 0.3;
+  let infoSectionBuildingHeight = 0.2;
+  let playersInfoHeight = (infoSectionHeight - infoSectionAlertInfoHeight - infoSectionBuildingHeight) / (gameLogic.NUM_PLAYERS + 1);
+  let playersInfoTextHeight = 0.05;
+  let playersInfoPadHeight = 0.01;
+  let playersInfoPicHeight = 0.2;
+
+  /**
+  * Game board size
+  */
+  let boardWidth = widthSize - infoSectionWidth;
+  let boardHeight = heightSize - myInfoHeight;
+
   export let infoSectionStyle = getInfoSectionStyle();
   export let gameBoardStyle = getGameBoardStyle();
   export let myPanelStyle = getMyPanelStyle();
+  export let alertInfoStyle = getAlertInfoStyle();
+  export let buildingInfoStyle = getBuildingInfoStyle();
+  export let bankInfoStyle = getBankInfoStyle();
 
   function onDimChanged(w: number, h: number) {
     width = w;
@@ -94,10 +128,13 @@ module game {
     infoSectionStyle = getInfoSectionStyle();
     gameBoardStyle = getGameBoardStyle();
     myPanelStyle = getMyPanelStyle();
+    alertInfoStyle = getAlertInfoStyle();
+    buildingInfoStyle = getBuildingInfoStyle();
+    bankInfoStyle = getBankInfoStyle();
   }
 
   export function init() {
-    resizeGameAreaService.setWidthToHeight(1.33333, onDimChanged);
+    resizeGameAreaService.setWidthToHeight(widthSize / heightSize, onDimChanged);
     
     translate.setTranslations(getTranslations());
     translate.setLanguage('en');
@@ -1348,8 +1385,8 @@ module game {
   function getInfoSectionStyle(): string {
     let t = 0; //top
     let l = 0; //left
-    let w = width * 0.375; //width
-    let h = height * 0.66667; //height
+    let w = width * (infoSectionWidth / widthSize); //width
+    let h = height * (infoSectionHeight / heightSize); //height
 
     log.log('Set InfoSection: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
 
@@ -1358,9 +1395,9 @@ module game {
 
   function getGameBoardStyle(): string {
     let t = 0; //top
-    let l = width * 0.375; //left
-    let w = width * 0.625; //width
-    let h = height * 0.66667; //height
+    let l = width * (infoSectionWidth / widthSize); //left
+    let w = width * (boardWidth / widthSize); //width
+    let h = height * (boardHeight / heightSize); //height
 
     log.log('Set GameBoard: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
 
@@ -1368,20 +1405,51 @@ module game {
   }
 
   function getMyPanelStyle(): string {
-    let t = height * 0.66667; //top
+    let t = height * ((heightSize - myInfoHeight) / heightSize); //top
     let l = 0; //left
     let w = width; //width
-    let h = height * 0.33333; //height
+    let h = height * (myInfoHeight / heightSize); //height
 
     log.log('Set MyPanel: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
 
     return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
   }
 
+  function getAlertInfoStyle(): string {
+    let t = 0; //top
+    let l = 0; //left
+    let w = width * (infoSectionWidth / widthSize); //width
+    let h = height * (infoSectionAlertInfoHeight / heightSize); //height
+
+    log.log('Set AlertInfo: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+  }
+
+  function getBuildingInfoStyle(): string {
+    let t = height * (infoSectionAlertInfoHeight / heightSize); //top
+    let l = 0; //left
+    let w = width * (infoSectionWidth / widthSize); //width
+    let h = height * (infoSectionBuildingHeight / heightSize); //height
+
+    log.log('Set AlertInfo: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+  }
+
+  function getBankInfoStyle(): string {
+    let t = height * ((infoSectionHeight - playersInfoHeight) / heightSize);
+    let l = 0;
+    let w = width * (infoSectionWidth / widthSize);
+    let h = height * (playersInfoHeight / heightSize);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+  }
+
   export function getMyInfoPicStyle(idx: number): string {
-    let t = height * 0.12;
-    let w = width * 0.09;
-    let h = height * 0.2;
+    let t = height * (myInfoHeaderHeight / heightSize);
+    let w = width * myInfoPicWidth;
+    let h = height * myInfoPicHeight;
 
     let size = w > h ? h : w;
     let l = idx * size;
@@ -1390,14 +1458,50 @@ module game {
   }
 
   export function getMyInfoNumsStyle(idx: number): string {
-    let w = width * 0.09;
-    let h = height * 0.2;
+    let w = width * myInfoPicWidth;
+    let h = height * myInfoPicHeight;
 
     let size = w > h ? h : w;
-    let t = height * 0.12 + size;
+    let t = height * (myInfoHeaderHeight / heightSize) + size;
     let l = idx * size + (size * 0.4);
 
     return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+  }
+
+  export function getPlayerInfoStyle(idx: number): string {
+    let t = height * (playersInfoHeight / heightSize * idx);
+    let l = 0;
+    let w = width * (infoSectionWidth / widthSize);
+    let h = height * (playersInfoHeight / heightSize);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+  }
+
+  export function getPlayerInfoTextStyle(): string {
+    let size = playersInfoTextHeight / height;
+    return 'font-size:' + size + 'px; top:0px; left:0px;';
+  }
+
+  export function getPlayerInfoPicStyle(idx: number, total: number): string {
+    let t = height * ((playersInfoTextHeight + playersInfoPadHeight) / heightSize);
+    let w = width * ((infoSectionWidth / total) / widthSize);
+    let h = height * (playersInfoPicHeight / heightSize);
+
+    let size = w > h ? h : w;
+    let l = idx * size;
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+  }
+
+  export function getPlayerInfoNumStyle(idx: number, total: number): string {
+    let t = height * ((playersInfoTextHeight + playersInfoPadHeight + playersInfoPicHeight) / heightSize);
+    let w = width * ((infoSectionWidth / total) / widthSize);
+    let h = height * (playersInfoPicHeight / heightSize);
+
+    let size = w > h ? h : w;
+    let l = (idx + 0.4) * size;
+
+    return 'top:' + t + 'px; left:' + l + 'px; font-size:' + (height * 0.01) + 'px;';
   }
 }
 
