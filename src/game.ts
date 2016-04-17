@@ -115,6 +115,8 @@ module game {
   let boardPad = 0.1;
   export let hexRadius = 0;
   export let hexUnit = getHexUnitStyle();
+  export let hexPoints = getHexShape();
+  export let hexVerticesPos = getHexVerticesPos();
 
   /**
   * Buildings properties
@@ -476,6 +478,19 @@ module game {
     return [x.toString(), y.toString()];
   }
 
+  function getHexVerticesPos(): string[] {
+    let ret: string[] = [];
+    let cx = hexRadius, cy = hexRadius;
+    for (let theta = 0; theta < Math.PI * 2; theta += Math.PI / 3) {
+      let pointX = cx + hexRadius * Math.sin(theta) - 4.5;
+      let pointY = cy + hexRadius * Math.cos(theta) - 4.5;
+      let style = 'top: ' + pointY + 'px; left: ' + pointX + 'px; width: 9px; height: 9px;';
+      ret.push(style);
+    }
+
+    return ret.slice(2, 6).concat(ret.slice(0, 2));
+  }
+
   export function getHexCenter(row: number, col: number): string {
     let offset = getOffset(row, 25);
     let t = 100 + offset * row * Math.sqrt(3);
@@ -507,9 +522,23 @@ module game {
     return coordinates[row][col][vertex].split(',');
   }
 
+  export function getVertexCenterNew(vertex: number): string[] {
+    return hexPoints[vertex].split(',');
+  }
+
   export function getEdgeCoordinates(row: number, col: number, edge: number): string[][] {
     let src = edge === 0 ? 5 : edge - 1;
     return [coordinates[row][col][src].split(','), coordinates[row][col][edge].split(',')];
+  }
+
+  export function getBlockZIndex(row: number, col: number): string {
+    for (let i = 0; i < 6; i++) {
+      if (showVertex(row, col, i)) {
+        return 'z-index: 10';
+      }
+    }
+
+    return 'z-index: 0;';
   }
 
   export function showVertex(row: number, col: number, vertex: number): boolean {
@@ -690,6 +719,29 @@ module game {
     return start + ' l' + dx1 + ',' + dy1 + ' l' + dx2 + ',' + dy2 + ' l' + dx3 + ',' + dy3;
   }
 
+  export function getHarborShape(row: number, col: number): string {
+    let cx = 45, cy = 45;
+    let start = 'M' + cx + ',' + cy;
+
+    let coords = angular.copy(game.hexPoints);
+    let v = coords[state.board[row][col].harbor.vertices[0]].split(',');
+    let x1 = parseFloat(v[0]);
+    let y1 = parseFloat(v[1]);
+
+    v = coords[state.board[row][col].harbor.vertices[1]].split(',');
+    let x2 = parseFloat(v[0]);
+    let y2 = parseFloat(v[1]);
+
+    let dx1 = x1 - cx;
+    let dy1 = y1 - cy;
+    let dx2 = x2 - x1;
+    let dy2 = y2 - y1;
+    let dx3 = cx - x2;
+    let dy3 = cy - y2;
+
+    return start + ' l' + dx1 + ',' + dy1 + ' l' + dx2 + ',' + dy2 + ' l' + dx3 + ',' + dy3;
+  }
+
   export function getHarborFill(row: number, col: number): string {
     if (state.board[row][col].harbor.trading === Resource.ANY)
     return 'white';
@@ -790,6 +842,7 @@ module game {
   export function onClickVertex(row: number, col: number, vertexNum: number) {
     
     if (state.board[row][col].vertices[vertexNum] === -1) {
+      console.log('event test');
       buildTarget = Construction.Settlement;
       buildRow = row;
       buildCol = col;
@@ -1581,8 +1634,10 @@ module game {
     return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
   }
 
-  export function getHexShape(): string {
-    return getHexPoints(45, 45, 45).join(' ');
+  function getHexShape(): string[] {
+    let points = getHexPoints(45, 45, 45);
+    let ret = points.slice(2, 6).concat(points.slice(0, 2));
+    return ret;
   }
 }
 

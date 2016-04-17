@@ -197,12 +197,69 @@
       <div id="Board" class="absolute-pos" ng-attr-style="{{game.boardStyle()}}">
         <div ng-repeat="row in rows">
           <div ng-repeat="col in cols">
-            <div class="absolute-pos" ng-attr-style="{{game.getHexBlockStyle(row, col)}}">
+            <div class="absolute-pos" ng-attr-style="{{game.getHexBlockStyle(row, col)}} {{game.getBlockZIndex(row, col)}}"
+                 ng-if="game.showHex(row, col)">
               <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-                   viewBox="0 0 90 90"
+                   viewBox="0 0 90 90" ng-mouseover="game.onMouseOverHex(row, col)"
+                   ng-click="game.onClickHex(row, col)"
                    ng-attr-width="{{game.hexUnit}}" ng-attr-height="{{game.hexUnit}}">
-                <polygon class="default-hex" ng-attr-points="{{game.getHexShape(row, col)}}"/>
+                <defs>
+                  <pattern id="r0" patternUnits="userSpaceOnUse" width="274" height="184">
+                    <image xlink:href="imgs/terrain0.jpg" x="0" y="0" width="274" height="184" />
+                  </pattern>
+                  <pattern id="r1" patternUnits="userSpaceOnUse" width="286" height="176">
+                    <image xlink:href="imgs/terrain1.jpg" x="0" y="0" width="286" height="176" />
+                  </pattern>
+                  <pattern id="r2" patternUnits="userSpaceOnUse" width="259" height="194">
+                    <image xlink:href="imgs/terrain2.jpg" x="0" y="0" width="259" height="194" />
+                  </pattern>
+                  <pattern id="r3" patternUnits="userSpaceOnUse" width="276" height="183">
+                    <image xlink:href="imgs/terrain3.jpg" x="0" y="0" width="276" height="183" />
+                  </pattern>
+                  <pattern id="r4" patternUnits="userSpaceOnUse" width="242" height="208">
+                    <image xlink:href="imgs/terrain4.jpg" x="0" y="0" width="242" height="208" />
+                  </pattern>
+                  <pattern id="r6" patternUnits="userSpaceOnUse" width="290" height="174">
+                    <image xlink:href="imgs/terrain6.jpg" x="0" y="0" width="290" height="174" />
+                  </pattern>
+                  <pattern id="r7" patternUnits="userSpaceOnUse" width="251" height="201">
+                    <image xlink:href="imgs/terrain7.jpg" x="0" y="0" width="251" height="201" />
+                  </pattern>
+                  <pattern id="harbor" patternUnits="userSpaceOnUse" width="160" height="120">
+                    <image xlink:href="imgs/harbor2.jpg" x="0" y="0" width="160" height="120" />
+                  </pattern>
+                </defs>
+                <polygon class="default-hex" ng-attr-points="{{game.hexPoints.join(' ')}}"
+                         ng-attr-fill="{{game.getHexFill(row, col)}}" />
+                <circle cx="45" cy="45" r="16" fill="white"
+                        ng-if="game.showRollNum(row, col)"/>
+                <path ng-attr-d="{{game.getHarborShape(row, col)}}"
+                      stroke-width="5"
+                      fill="url(#harbor)"
+                      ng-if="game.showHarbor(row, col)" />
+                <circle cx="45" cy="45" r="20" ng-attr-fill="{{game.getHarborFill(row, col)}}"
+                        ng-if="game.showHarbor(row, col)" />
+                <text x="45" y="45" text-anchor="middle" font-weight="bold" dominant-baseline="central"
+                      ng-attr-fill="{{game.harborIsAny(row, col) ? 'black' : 'white'}}"
+                      ng-if="game.showHarbor(row, col)">
+                  {{game.harborIsAny(row, col) ? '3:1' : '2:1'}}
+                </text>
+                <text x="45" y="45" text-anchor="middle" font-weight="bold" dominant-baseline="central"
+                      ng-attr-fill="{{game.getRollColor(row, col)}}"
+                      ng-if="game.showRollNum(row, col)">
+                  {{game.getRollNumText(row, col)}}
+                </text>
               </svg>
+              <div ng-repeat="vertex in vertices">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="-4.5 -4.5 9 9" width="9" height="9"
+                     ng-attr-class="absolute-pos {{game.getVertexClass(row, col, vertex)}}"
+                     ng-attr-style="{{game.hexVerticesPos[vertex]}}"
+                     ng-click="game.onClickVertex(row, col, vertex)"
+                     ng-mouseover="game.onMouseOverVertex(row, col, vertex)"
+                     ng-if="game.showVertex(row, col, vertex)">
+                  <circle cx="0" cy="0" r="4.5" />
+                </svg>
+              </div>
             </div>
           </div>
         </div>

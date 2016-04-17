@@ -93,6 +93,8 @@ var game;
     var boardPad = 0.1;
     game.hexRadius = 0;
     game.hexUnit = getHexUnitStyle();
+    game.hexPoints = getHexShape();
+    game.hexVerticesPos = getHexVerticesPos();
     /**
     * Buildings properties
     */
@@ -432,6 +434,17 @@ var game;
         return [x.toString(), y.toString()];
     }
     game.getCenter = getCenter;
+    function getHexVerticesPos() {
+        var ret = [];
+        var cx = game.hexRadius, cy = game.hexRadius;
+        for (var theta = 0; theta < Math.PI * 2; theta += Math.PI / 3) {
+            var pointX = cx + game.hexRadius * Math.sin(theta) - 4.5;
+            var pointY = cy + game.hexRadius * Math.cos(theta) - 4.5;
+            var style = 'top: ' + pointY + 'px; left: ' + pointX + 'px; width: 9px; height: 9px;';
+            ret.push(style);
+        }
+        return ret.slice(2, 6).concat(ret.slice(0, 2));
+    }
     function getHexCenter(row, col) {
         var offset = getOffset(row, 25);
         var t = 100 + offset * row * Math.sqrt(3);
@@ -465,11 +478,24 @@ var game;
         return game.coordinates[row][col][vertex].split(',');
     }
     game.getVertexCenter = getVertexCenter;
+    function getVertexCenterNew(vertex) {
+        return game.hexPoints[vertex].split(',');
+    }
+    game.getVertexCenterNew = getVertexCenterNew;
     function getEdgeCoordinates(row, col, edge) {
         var src = edge === 0 ? 5 : edge - 1;
         return [game.coordinates[row][col][src].split(','), game.coordinates[row][col][edge].split(',')];
     }
     game.getEdgeCoordinates = getEdgeCoordinates;
+    function getBlockZIndex(row, col) {
+        for (var i = 0; i < 6; i++) {
+            if (showVertex(row, col, i)) {
+                return 'z-index: 10';
+            }
+        }
+        return 'z-index: 0;';
+    }
+    game.getBlockZIndex = getBlockZIndex;
     function showVertex(row, col, vertex) {
         if (game.state.board[row][col].vertices[vertex] !== -1 || game.playingDevRoadBuild) {
             return false;
@@ -627,6 +653,25 @@ var game;
         return start + ' l' + dx1 + ',' + dy1 + ' l' + dx2 + ',' + dy2 + ' l' + dx3 + ',' + dy3;
     }
     game.getHarbor = getHarbor;
+    function getHarborShape(row, col) {
+        var cx = 45, cy = 45;
+        var start = 'M' + cx + ',' + cy;
+        var coords = angular.copy(game.hexPoints);
+        var v = coords[game.state.board[row][col].harbor.vertices[0]].split(',');
+        var x1 = parseFloat(v[0]);
+        var y1 = parseFloat(v[1]);
+        v = coords[game.state.board[row][col].harbor.vertices[1]].split(',');
+        var x2 = parseFloat(v[0]);
+        var y2 = parseFloat(v[1]);
+        var dx1 = x1 - cx;
+        var dy1 = y1 - cy;
+        var dx2 = x2 - x1;
+        var dy2 = y2 - y1;
+        var dx3 = cx - x2;
+        var dy3 = cy - y2;
+        return start + ' l' + dx1 + ',' + dy1 + ' l' + dx2 + ',' + dy2 + ' l' + dx3 + ',' + dy3;
+    }
+    game.getHarborShape = getHarborShape;
     function getHarborFill(row, col) {
         if (game.state.board[row][col].harbor.trading === Resource.ANY)
             return 'white';
@@ -722,6 +767,7 @@ var game;
     game.onMouseOverVertex = onMouseOverVertex;
     function onClickVertex(row, col, vertexNum) {
         if (game.state.board[row][col].vertices[vertexNum] === -1) {
+            console.log('event test');
             buildTarget = Construction.Settlement;
             buildRow = row;
             buildCol = col;
@@ -1442,9 +1488,10 @@ var game;
     }
     game.getHexBlockStyle = getHexBlockStyle;
     function getHexShape() {
-        return getHexPoints(45, 45, 45).join(' ');
+        var points = getHexPoints(45, 45, 45);
+        var ret = points.slice(2, 6).concat(points.slice(0, 2));
+        return ret;
     }
-    game.getHexShape = getHexShape;
 })(game || (game = {}));
 function getArray(length) {
     var ret = [];
