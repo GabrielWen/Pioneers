@@ -112,11 +112,18 @@ module game {
   let boardWidth = widthSize - infoSectionWidth;
   let boardHeight = heightSize - myInfoHeight;
 
+  /**
+  * Buildings properties
+  */
+  let buildingInfoUnit = 0.1;
+  export let settlementSVGSize = getSettlementSVGSize();
+
   export let infoSectionStyle = getInfoSectionStyle();
   export let gameBoardStyle = getGameBoardStyle();
   export let myPanelStyle = getMyPanelStyle();
   export let alertInfoStyle = getAlertInfoStyle();
   export let buildingInfoStyle = getBuildingInfoStyle();
+  export let playersInfoStyle = getPlayersInfoStyle();
   export let bankInfoStyle = getBankInfoStyle();
 
   function onDimChanged(w: number, h: number) {
@@ -130,6 +137,7 @@ module game {
     myPanelStyle = getMyPanelStyle();
     alertInfoStyle = getAlertInfoStyle();
     buildingInfoStyle = getBuildingInfoStyle();
+    playersInfoStyle = getPlayersInfoStyle();
     bankInfoStyle = getBankInfoStyle();
   }
 
@@ -1437,6 +1445,17 @@ module game {
     return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
   }
 
+  function getPlayersInfoStyle(): string {
+    let t = height * ((infoSectionAlertInfoHeight + infoSectionBuildingHeight) / heightSize); //top
+    let l = 0; //left
+    let w = width * (infoSectionWidth / widthSize); //width
+    let h = height * (playersInfoHeight / heightSize); //height
+
+    log.log('Set PlayersInfo: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+  }
+
   function getBankInfoStyle(): string {
     let t = height * ((infoSectionHeight - playersInfoHeight) / heightSize);
     let l = 0;
@@ -1444,6 +1463,11 @@ module game {
     let h = height * (playersInfoHeight / heightSize);
 
     return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+  }
+
+  function getSettlementSVGSize(): number[] {
+    let size = height * (buildingInfoUnit / heightSize) * 2;
+    return [size, size];
   }
 
   export function getMyInfoPicStyle(idx: number): string {
@@ -1502,6 +1526,24 @@ module game {
     let l = (idx + 0.4) * size;
 
     return 'top:' + t + 'px; left:' + l + 'px; font-size:' + (height * 0.01) + 'px;';
+  }
+
+  export function getBuildingInfoSettlementStyle(): string {
+    let size = height * (buildingInfoUnit / heightSize);
+
+    return 'width:' + (size * 2) + 'px; height:' + (size * 2) + 'px;';
+  }
+
+  export function getBuildingInfoCityStyle(): string {
+    let size = height * (buildingInfoUnit / heightSize);
+
+    return 'width:' + (size * 3) + 'px; height:' + (size * 2) + 'px;';
+  }
+
+  export function getBuildingInfoRoadStyle(): string {
+    let size = height * (buildingInfoUnit / heightSize);
+
+    return 'width:' + (size * 4) + 'px; height:' + (size * 2) + 'px;';
   }
 }
 

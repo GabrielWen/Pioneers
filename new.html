@@ -126,14 +126,45 @@
 <div id="gameArea">
   <div class="container-fluid">
     <div id="InfoSection" class="absolute-pos" ng-attr-style="{{game.infoSectionStyle}}">
-      <div id="AlertInfo" ng-attr-class="alert-{{game.alertStyle}}" ng-attr-style="{{game.alertInfoStyle}}"
+      <div id="AlertInfo" ng-attr-class="absolute-pos alert-{{game.alertStyle}}" ng-attr-style="{{game.alertInfoStyle}}"
            role="alert">
         <!-- TODO: alertMsg shrink to fit -->
         <strong class="alert-text">{{game.alertMsg}}</strong>
       </div>
-      <div id="BuildingInfo" ng-attr-style="{{game.buildingInfoStyle}}">
+      <div id="BuildingInfo" class="absolute-pos" ng-attr-style="{{game.buildingInfoStyle}}">
+        <div id="num-settlement" draggable="true" class="building-info" ng-attr-style="{{game.getBuildingInfoSettlementStyle()}}">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 30 30" width="30" height="30">
+            <path d="M15,0 l-15,15 v15 h30 v-15 l-15,-15"
+                  ng-attr-fill="{{game.getColor(game.myIndex)}}"
+                  stroke-width="1" stroke="black" />
+            <text x="15" y="20" text-anchor="middle" font-weight="bold" fill="black">
+              {{game.getNumSettlementCanBuild()}}
+            </text>
+          </svg>
+        </div>
+        <div id="num-city" draggable="true" class="building-info" ng-attr-style="{{game.getBuildingInfoCityStyle()}}">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="45" height="30" viewBox="0 0 45 30">
+            <path d="M15,0 l-15,15 v15 h45 v-15 h-15 l-15,-15"
+                  ng-attr-fill="{{game.getColor(game.myIndex)}}"
+                  stroke-width="1" stroke="black"/>
+             <text x="15" y="20" text-anchor="middle" font-weight="bold" fill="black">
+                 {{game.getNumCityCanBuild()}}
+             </text>
+           </svg>
+        </div>
+        <div id="num-road" draggable="true" class="building-info" ng-attr-style="{{game.getBuildingInfoRoadStyle()}}">
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="60" height="30" viewBox="0 0 60 30">
+            <path d="M0,15 v15 h60 v-15 h-60"
+                  ng-attr-fill="{{game.getColor(game.myIndex)}}"
+                  stroke-width="1"
+                  stroke="black"/>
+            <text x="30" y="13" text-anchor="middle" font-weight="bold" fill="black">
+              {{game.getNumRoadCanBuild()}}
+            </text>
+          </svg>
+        </div>
       </div>
-      <div id="PlayersInfo">
+      <div id="PlayersInfo" class="absolute-pos" ng-attr-style="{{game.playersInfoStyle}}">
         <div ng-repeat="p in players">
           <div ng-attr-class="absolute-pos {{'player-' + p + '-color'}} {{game.getPlayerBorder(p)}}" ng-attr-style="{{game.getPlayerInfoStyle(p)}}">
             <strong class="absolute-pos" ng-attr-style="{{game.getPlayerInfoTextStyle()}}">Player {{p+1}}</strong>

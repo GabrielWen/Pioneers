@@ -89,11 +89,17 @@ var game;
     */
     var boardWidth = widthSize - infoSectionWidth;
     var boardHeight = heightSize - myInfoHeight;
+    /**
+    * Buildings properties
+    */
+    var buildingInfoUnit = 0.1;
+    game.settlementSVGSize = getSettlementSVGSize();
     game.infoSectionStyle = getInfoSectionStyle();
     game.gameBoardStyle = getGameBoardStyle();
     game.myPanelStyle = getMyPanelStyle();
     game.alertInfoStyle = getAlertInfoStyle();
     game.buildingInfoStyle = getBuildingInfoStyle();
+    game.playersInfoStyle = getPlayersInfoStyle();
     game.bankInfoStyle = getBankInfoStyle();
     function onDimChanged(w, h) {
         width = w;
@@ -104,6 +110,7 @@ var game;
         game.myPanelStyle = getMyPanelStyle();
         game.alertInfoStyle = getAlertInfoStyle();
         game.buildingInfoStyle = getBuildingInfoStyle();
+        game.playersInfoStyle = getPlayersInfoStyle();
         game.bankInfoStyle = getBankInfoStyle();
     }
     function init() {
@@ -1323,12 +1330,24 @@ var game;
         log.log('Set AlertInfo: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
         return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
     }
+    function getPlayersInfoStyle() {
+        var t = height * ((infoSectionAlertInfoHeight + infoSectionBuildingHeight) / heightSize); //top
+        var l = 0; //left
+        var w = width * (infoSectionWidth / widthSize); //width
+        var h = height * (playersInfoHeight / heightSize); //height
+        log.log('Set PlayersInfo: top = ' + t + ', left = ' + l + ', width = ' + w + ', height = ' + h);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+    }
     function getBankInfoStyle() {
         var t = height * ((infoSectionHeight - playersInfoHeight) / heightSize);
         var l = 0;
         var w = width * (infoSectionWidth / widthSize);
         var h = height * (playersInfoHeight / heightSize);
         return 'top:' + t + 'px; left:' + l + 'px; width:' + w + 'px; height:' + h + 'px;';
+    }
+    function getSettlementSVGSize() {
+        var size = height * (buildingInfoUnit / heightSize) * 2;
+        return [size, size];
     }
     function getMyInfoPicStyle(idx) {
         var t = height * (myInfoHeaderHeight / heightSize);
@@ -1379,6 +1398,21 @@ var game;
         return 'top:' + t + 'px; left:' + l + 'px; font-size:' + (height * 0.01) + 'px;';
     }
     game.getPlayerInfoNumStyle = getPlayerInfoNumStyle;
+    function getBuildingInfoSettlementStyle() {
+        var size = height * (buildingInfoUnit / heightSize);
+        return 'width:' + (size * 2) + 'px; height:' + (size * 2) + 'px;';
+    }
+    game.getBuildingInfoSettlementStyle = getBuildingInfoSettlementStyle;
+    function getBuildingInfoCityStyle() {
+        var size = height * (buildingInfoUnit / heightSize);
+        return 'width:' + (size * 3) + 'px; height:' + (size * 2) + 'px;';
+    }
+    game.getBuildingInfoCityStyle = getBuildingInfoCityStyle;
+    function getBuildingInfoRoadStyle() {
+        var size = height * (buildingInfoUnit / heightSize);
+        return 'width:' + (size * 4) + 'px; height:' + (size * 2) + 'px;';
+    }
+    game.getBuildingInfoRoadStyle = getBuildingInfoRoadStyle;
 })(game || (game = {}));
 function getArray(length) {
     var ret = [];
