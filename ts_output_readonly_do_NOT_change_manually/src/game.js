@@ -89,6 +89,10 @@ var game;
     */
     var boardWidth = widthSize - infoSectionWidth;
     var boardHeight = heightSize - myInfoHeight;
+    var leftReserved = 0.4;
+    var boardPad = 0.1;
+    game.hexRadius = 0;
+    game.hexUnit = getHexUnitStyle();
     /**
     * Buildings properties
     */
@@ -112,6 +116,7 @@ var game;
         game.buildingInfoStyle = getBuildingInfoStyle();
         game.playersInfoStyle = getPlayersInfoStyle();
         game.bankInfoStyle = getBankInfoStyle();
+        game.hexUnit = getHexUnitStyle();
     }
     function init() {
         resizeGameAreaService.setWidthToHeight(widthSize / heightSize, onDimChanged);
@@ -1413,6 +1418,33 @@ var game;
         return 'width:' + (size * 4) + 'px; height:' + (size * 2) + 'px;';
     }
     game.getBuildingInfoRoadStyle = getBuildingInfoRoadStyle;
+    function boardStyle() {
+        var t = height * (boardPad / heightSize);
+        var l = width * ((leftReserved + boardPad) / widthSize);
+        return 'top:' + t + 'px; left:' + l + 'px;';
+    }
+    game.boardStyle = boardStyle;
+    function getHexUnitStyle() {
+        var h = (height * ((boardHeight - (boardPad * 2)) / heightSize)) / gameLogic.ROWS;
+        var w = (width * ((boardWidth - leftReserved - (boardPad * 2)) / widthSize)) / gameLogic.COLS;
+        var size = h > w ? w : h;
+        game.hexRadius = size / 2;
+        return '' + size;
+    }
+    function getHexBlockStyle(row, col) {
+        var h = (height * ((boardHeight - (boardPad * 2)) / heightSize)) / gameLogic.ROWS;
+        var w = (width * ((boardWidth - leftReserved - (boardPad * 2)) / widthSize)) / gameLogic.COLS;
+        var size = h > w ? w : h;
+        var offset = getOffset(row, game.hexRadius);
+        var t = offset * row * Math.sqrt(3);
+        var l = offset * col * 2 - (row % 2 === 1 ? offset : 0);
+        return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+    }
+    game.getHexBlockStyle = getHexBlockStyle;
+    function getHexShape() {
+        return getHexPoints(45, 45, 45).join(' ');
+    }
+    game.getHexShape = getHexShape;
 })(game || (game = {}));
 function getArray(length) {
     var ret = [];

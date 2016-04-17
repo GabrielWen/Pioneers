@@ -194,6 +194,19 @@
       </div>
     </div>
     <div id="GameBoard" class="absolute-pos" ng-attr-style="{{game.gameBoardStyle}}">
+      <div id="Board" class="absolute-pos" ng-attr-style="{{game.boardStyle()}}">
+        <div ng-repeat="row in rows">
+          <div ng-repeat="col in cols">
+            <div class="absolute-pos" ng-attr-style="{{game.getHexBlockStyle(row, col)}}">
+              <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                   viewBox="0 0 90 90"
+                   ng-attr-width="{{game.hexUnit}}" ng-attr-height="{{game.hexUnit}}">
+                <polygon class="default-hex" ng-attr-points="{{game.getHexShape(row, col)}}"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="MyResourcesInfo" class="absolute-pos" ng-attr-style="{{game.myPanelStyle}}">
       <h4>My Resources</h4>

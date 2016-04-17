@@ -111,6 +111,10 @@ module game {
   */
   let boardWidth = widthSize - infoSectionWidth;
   let boardHeight = heightSize - myInfoHeight;
+  let leftReserved = 0.4;
+  let boardPad = 0.1;
+  export let hexRadius = 0;
+  export let hexUnit = getHexUnitStyle();
 
   /**
   * Buildings properties
@@ -139,6 +143,7 @@ module game {
     buildingInfoStyle = getBuildingInfoStyle();
     playersInfoStyle = getPlayersInfoStyle();
     bankInfoStyle = getBankInfoStyle();
+    hexUnit = getHexUnitStyle();
   }
 
   export function init() {
@@ -1544,6 +1549,40 @@ module game {
     let size = height * (buildingInfoUnit / heightSize);
 
     return 'width:' + (size * 4) + 'px; height:' + (size * 2) + 'px;';
+  }
+
+  export function boardStyle(): string {
+    let t = height * (boardPad / heightSize);
+    let l = width * ((leftReserved + boardPad) / widthSize);
+
+    return 'top:' + t + 'px; left:' + l + 'px;';
+  }
+
+  function getHexUnitStyle(): string {
+    let h = (height * ((boardHeight - (boardPad * 2)) / heightSize)) / gameLogic.ROWS;
+    let w = (width * ((boardWidth - leftReserved - (boardPad * 2)) / widthSize)) / gameLogic.COLS;
+
+    let size = h > w ? w : h;
+    hexRadius = size / 2;
+
+    return '' + size;
+  }
+
+  export function getHexBlockStyle(row: number, col: number): string {
+    let h = (height * ((boardHeight - (boardPad * 2)) / heightSize)) / gameLogic.ROWS;
+    let w = (width * ((boardWidth - leftReserved - (boardPad * 2)) / widthSize)) / gameLogic.COLS;
+
+    let size = h > w ? w : h;
+
+    let offset = getOffset(row, hexRadius);
+    let t = offset * row * Math.sqrt(3);
+    let l = offset * col * 2 - (row % 2 === 1 ? offset : 0);
+
+    return 'top:' + t + 'px; left:' + l + 'px; width:' + size + 'px; height:' + size + 'px;';
+  }
+
+  export function getHexShape(): string {
+    return getHexPoints(45, 45, 45).join(' ');
   }
 }
 
